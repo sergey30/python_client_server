@@ -7,3 +7,4 @@ socket_client.send(str.encode("hi"))
 data = socket_client.recv(1024)
 socket_client.close()
 print("Received:", bytes.decode(data))
+#
