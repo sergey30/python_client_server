@@ -16,4 +16,3 @@ while True:
             break
         socket_client.send(data.upper())
     socket_client.close()
-#
