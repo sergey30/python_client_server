@@ -17,5 +17,5 @@ while True:
         data = open("server_test.txt", "a")
         data.write(data_from_client.decode())
         data.close()
-        socket_client.send(data_from_client.upper())
+        #socket_client.send(data_from_client.upper())
     socket_client.close()
