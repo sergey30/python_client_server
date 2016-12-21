@@ -1,10 +1,12 @@
 import socket
+import umsgpack
 
-socket_client = socket.socket()
-socket_client.connect(("127.0.0.1", 9090))
-data = open("client_test_2.txt", "rb")
+data = open("client_test_2.json")
 for i in data:
-    socket_client.send(i)
+    socket_client = socket.socket()
+    socket_client.connect(("127.0.0.1", 9090))
+    socket_client.send(umsgpack.packb(i))
+    socket_client.close()
 data.close()
-socket_client.close()
+
 print("Ready")
