@@ -1,4 +1,5 @@
 import socket
+import umsgpack
 
 socket_server = socket.socket()
 socket_server.bind(("", 9090))
@@ -8,8 +9,8 @@ def record_data():
     data_from_client = socket_client.recv(1024)
     if not data_from_client:
         return
-    data = open("server_test.txt", "a")
-    data.write(data_from_client.decode())
+    data = open("server_test.json", "a")
+    data.write(umsgpack.unpackb(data_from_client))
     data.close()
     record_data()
 
