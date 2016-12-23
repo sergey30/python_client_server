@@ -15,7 +15,6 @@ def record_data():
         data.close()
 
 while True:
-
     socket_client, address_client = socket_server.accept()
     print("Connected by:", address_client)
     record_data()
