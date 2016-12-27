@@ -36,6 +36,7 @@ def record_sql():
             counter = counter + 1
             data_json.close()
             data_sql.close()
+            print("Recorded ", counter, " lines")
         else:
             continue
 
