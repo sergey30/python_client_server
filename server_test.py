@@ -29,8 +29,7 @@ def record_sql():
         if result:
             data_json = open("server_test.json")
             data_sql = open("server_test.txt", "a")
-            data_json_list = list(data_json)
-            data_sql.write(data_json_list[counter])
+            data_sql.write(list(data_json)[counter])
             counter = counter + 1
             data_json.close()
             data_sql.close()
