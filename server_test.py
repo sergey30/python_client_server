@@ -22,9 +22,7 @@ def record_sql():
     while True:
         data_json = open("server_test.json")
         data_sql = open("server_test.txt")
-        data_json_list = list(data_json)
-        data_sql_list = list(data_sql)
-        result = len(data_json_list) > len(data_sql_list)
+        result = len(list(data_json)) > len(list(data_sql))
         data_json.close()
         data_sql.close()
 
