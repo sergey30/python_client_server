@@ -1,7 +1,7 @@
 import socket
 import umsgpack
 import multiprocessing
-import json
+import psycopg2
 
 socket_server = socket.socket()
 socket_server.bind(("", 9090))
@@ -13,23 +13,29 @@ def record_json():
             data_from_client = socket_client.recv(1024)
             if not data_from_client:
                 continue
-            data = open("server.json", "a")
-            data.write(umsgpack.unpackb(data_from_client))
-            data.close()
+            with open("server.json", "a") as data:
+                data.write(umsgpack.unpackb(data_from_client))
             socket_client.close()
 
 def record_sql():
+    connect_db = psycopg2.connect(database="test_db", user="postgres", password="13", host="127.0.0.1", port="5432")
+    cursor_db = connect_db.cursor()
+
+    cursor_db.execute("CREATE TABLE clients (id SERIAL PRIMARY KEY, data json);")
+
     counter = 0
     while True:
-        with open("server.json") as data_json, open("server.txt") as data_sql:
-            result = len(list(data_json)) > len(list(data_sql))
+        cursor_db.execute("SELECT COUNT(*) FROM Clients")
+        number_rows_sql = cursor_db.fetchall()
+        with open("server.json") as data_json:
+            number_rows_json = len(list(data_json))
+        result = number_rows_json > number_rows_sql[0][0]
         if result:
-            with open("server.json") as data_json, open("server.txt", "a") as data_sql:
-                data_sql.write(list(data_json)[counter])
-            counter = counter + 1
-            print("Recorded ", counter, " lines")
+            cursor_db.execute("COPY clients(data) FROM '/Users/s/Library/Mobile Documents/com~apple~CloudDocs/programming/python_client_server/server.json'")
+            connect_db.commit()
         else:
             continue
+    connect_db.close()
 
 record = multiprocessing.Process(target = record_sql, args = ())
 
