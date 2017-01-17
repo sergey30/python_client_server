@@ -21,20 +21,12 @@ def record_sql():
     connect_db = psycopg2.connect(database="test_db", user="postgres", password="13", host="127.0.0.1", port="5432")
     cursor_db = connect_db.cursor()
 
-    cursor_db.execute("CREATE TABLE clients (id SERIAL PRIMARY KEY, data json);")
+    cursor_db.execute("CREATE TABLE clients (id SERIAL PRIMARY KEY, data TEXT);")
 
-    counter = 0
     while True:
-        cursor_db.execute("SELECT COUNT(*) FROM Clients")
-        number_rows_sql = cursor_db.fetchall()
-        with open("server.json") as data_json:
-            number_rows_json = len(list(data_json))
-        result = number_rows_json > number_rows_sql[0][0]
-        if result:
-            cursor_db.execute("COPY clients(data) FROM '/Users/s/Library/Mobile Documents/com~apple~CloudDocs/programming/python_client_server/server.json'")
-            connect_db.commit()
-        else:
-            continue
+        cursor_db.execute("COPY clients(data) FROM '/Users/s/Library/Mobile Documents/com~apple~CloudDocs/programming/python_client_server/server.json'")
+        connect_db.commit()
+
     connect_db.close()
 
 record = multiprocessing.Process(target = record_sql, args = ())
