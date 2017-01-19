@@ -21,10 +21,10 @@ def record_sql():
     connect_db = psycopg2.connect(database="test_db", user="postgres", password="13", host="127.0.0.1", port="5432")
     cursor_db = connect_db.cursor()
 
-    cursor_db.execute("CREATE TABLE clients ( data TEXT UNIQUE);")
+    cursor_db.execute("CREATE TABLE clients (data JSON UNIQUE);")
 
     while True:
-        cursor_db.execute("CREATE TABLE temp_table (data TEXT);")
+        cursor_db.execute("CREATE TABLE temp_table (data JSON);")
         cursor_db.execute("COPY temp_table(data) FROM '/Users/s/Library/Mobile Documents/com~apple~CloudDocs/programming/python_client_server/server.json';")
         cursor_db.execute("INSERT INTO clients (data) SELECT data FROM temp_table ON CONFLICT DO NOTHING;")
         cursor_db.execute("DROP TABLE temp_table;")
